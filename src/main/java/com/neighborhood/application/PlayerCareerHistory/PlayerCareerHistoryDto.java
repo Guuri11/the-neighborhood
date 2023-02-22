@@ -17,10 +17,10 @@ public class PlayerCareerHistoryDto implements Serializable {
   @NotEmpty(message = "Team name required")
   private final String team;
   private final String league;
-  private final Double points_per_game;
-  private final Double assists_per_game;
-  private final Double rebounds_per_game;
-  private final Double blocks_per_game;
-  private final Double steals_per_game;
-  private final Double minutes_per_game;
+  private final Double pointsPerGame;
+  private final Double assistsPerGame;
+  private final Double reboundsPerGame;
+  private final Double blocksPerGame;
+  private final Double stealsPerGame;
+  private final Double minutesPerGame;
 }

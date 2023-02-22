@@ -36,12 +36,12 @@ public class PlayerCareerHistory {
   @NotEmpty(message = "Team name required")
   private String team;
   private String league;
-  private Double points_per_game;
-  private Double assists_per_game;
-  private Double rebounds_per_game;
-  private Double blocks_per_game;
-  private Double steals_per_game;
-  private Double minutes_per_game;
+  private Double pointsPerGame;
+  private Double assistsPerGame;
+  private Double reboundsPerGame;
+  private Double blocksPerGame;
+  private Double stealsPerGame;
+  private Double minutesPerGame;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 }

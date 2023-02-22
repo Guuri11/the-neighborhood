@@ -40,17 +40,17 @@ public class PlayerCareerHistoryController {
     return playerCareerHistoryService.create(newPlayerCareerHistory, Long.parseLong(authentication.getName()));
   }
 
-  @PutMapping
-  PlayerCareerHistoryDto replace(@RequestBody final PlayerCareerHistory newPlayerCareerHistory,
+  @PutMapping("/{id}")
+  PlayerCareerHistoryDto replace(@RequestBody final PlayerCareerHistory updatedPlayerCareerHistory, final Long id,
       final Authentication authentication) {
 
-    return playerCareerHistoryService.update(newPlayerCareerHistory, Long.parseLong(authentication.getName()));
+    return playerCareerHistoryService.update(updatedPlayerCareerHistory, Long.parseLong(authentication.getName()), id);
   }
 
-  @DeleteMapping
-  ResponseEntity<?> delete(final Authentication authentication) {
+  @DeleteMapping("/{id}")
+  ResponseEntity<?> delete(final Authentication authentication, final Long id) {
 
-    playerCareerHistoryService.delete(Long.parseLong(authentication.getName()));
+    playerCareerHistoryService.delete(Long.parseLong(authentication.getName()), id);
     return ResponseEntity.noContent()
         .build();
   }

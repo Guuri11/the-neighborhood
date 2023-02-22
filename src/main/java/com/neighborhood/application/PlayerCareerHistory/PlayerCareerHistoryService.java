@@ -8,6 +8,7 @@ import com.neighborhood.infrastructure.persistence.PlayerCareerHistoryRepository
 import com.neighborhood.infrastructure.persistence.PlayerRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -55,12 +56,25 @@ public class PlayerCareerHistoryService {
   }
 
   public PlayerCareerHistoryDto update(@NotNull @Valid final PlayerCareerHistory playerCareerHistory,
-      @NotNull final Long id) {
+      @NotNull final Long playerId, @NotNull final Long id) {
 
     final PlayerCareerHistory existing = repository.findById(id)
         .orElseThrow(() -> new NotFoundException(id));
 
+    if (!Objects.equals(existing.getPlayer()
+        .getId(), playerId)) {
+      throw new NotFoundException(id);
+    }
+
     existing.setLeague(playerCareerHistory.getLeague());
+    existing.setAssistsPerGame(playerCareerHistory.getAssistsPerGame());
+    existing.setPointsPerGame(playerCareerHistory.getPointsPerGame());
+    existing.setReboundsPerGame(playerCareerHistory.getReboundsPerGame());
+    existing.setBlocksPerGame(playerCareerHistory.getBlocksPerGame());
+    existing.setStealsPerGame(playerCareerHistory.getStealsPerGame());
+    existing.setMinutesPerGame(playerCareerHistory.getMinutesPerGame());
+    existing.setTeam(playerCareerHistory.getTeam());
+    existing.setTeam(playerCareerHistory.getLeague());
     existing.setUpdatedAt(LocalDateTime.now());
 
     final PlayerCareerHistory saved = repository.save(existing);
@@ -68,10 +82,15 @@ public class PlayerCareerHistoryService {
     return mapper.toDto(saved);
   }
 
-  public void delete(@NotNull final Long id) {
+  public void delete(@NotNull final Long id, @NotNull final Long playerId) {
 
     final PlayerCareerHistory existing = repository.findById(id)
         .orElseThrow(() -> new NotFoundException(id));
+
+    if (!Objects.equals(existing.getPlayer()
+        .getId(), playerId)) {
+      throw new NotFoundException(id);
+    }
 
     repository.delete(existing);
   }
