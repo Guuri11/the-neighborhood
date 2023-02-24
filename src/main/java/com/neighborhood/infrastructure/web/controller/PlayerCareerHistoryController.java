@@ -50,7 +50,7 @@ public class PlayerCareerHistoryController {
   @DeleteMapping("/{id}")
   ResponseEntity<?> delete(final Authentication authentication, final Long id) {
 
-    playerCareerHistoryService.delete(Long.parseLong(authentication.getName()), id);
+    playerCareerHistoryService.delete(id, Long.parseLong(authentication.getName()));
     return ResponseEntity.noContent()
         .build();
   }
