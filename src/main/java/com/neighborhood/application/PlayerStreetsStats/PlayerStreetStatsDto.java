@@ -26,4 +26,6 @@ public class PlayerStreetStatsDto implements Serializable {
   @PositiveOrZero(message = "Value has to be 0 or more")
   private final Long steals;
   private final Boolean verified;
+
+  private final Boolean accepted;
 }

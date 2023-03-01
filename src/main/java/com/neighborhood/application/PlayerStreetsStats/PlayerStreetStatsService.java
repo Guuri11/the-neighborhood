@@ -73,6 +73,7 @@ public class PlayerStreetStatsService {
     existing.setSteals(playerStreetStats.getSteals());
     // TODO: handle this with a new function where the other player have to verify the stts
     existing.setVerified(playerStreetStats.getVerified());
+    existing.setAccepted(playerStreetStats.getAccepted());
     existing.setUpdatedAt(LocalDateTime.now());
 
     final PlayerStreetStats saved = repository.save(existing);
