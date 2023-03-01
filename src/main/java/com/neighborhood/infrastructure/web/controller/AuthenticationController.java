@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
 
   private final AuthenticationService service;
 
@@ -23,6 +23,7 @@ public class AuthenticationController {
       @RequestBody final RegisterRequest request
   ) {
 
+    this.logger.info("Request: POST /auth/register: {}", request.toString());
     return ResponseEntity.ok(service.register(request));
   }
 
@@ -31,6 +32,7 @@ public class AuthenticationController {
       @RequestBody final AuthenticationRequest request
   ) {
 
+    this.logger.info("Request: POST /auth/authenticate: {}", request.toString());
     return ResponseEntity.ok(service.authenticate(request));
   }
 
