@@ -1,9 +1,13 @@
 package com.neighborhood.application.ChatMessage;
 
 import com.neighborhood.application.NotFoundException;
+import com.neighborhood.application.Notification.NotificationService;
 import com.neighborhood.application.mappers.ChatMessageMapper;
 import com.neighborhood.domain.Chat;
 import com.neighborhood.domain.ChatMessage;
+import com.neighborhood.domain.Notification.MessageType;
+import com.neighborhood.domain.Notification.Notification;
+import com.neighborhood.domain.Player.Player;
 import com.neighborhood.infrastructure.persistence.ChatMessageRepository;
 import com.neighborhood.infrastructure.persistence.ChatRepository;
 import java.time.LocalDateTime;
@@ -21,6 +25,9 @@ public class ChatMessageService {
 
   @Autowired
   private ChatMessageMapper mapper;
+
+  @Autowired
+  private NotificationService notificationService;
 
   @Autowired
   private ChatMessageRepository chatMessageRepository;
@@ -41,6 +48,7 @@ public class ChatMessageService {
 
     chatMessage.setCreatedAt(LocalDateTime.now());
     chatMessage.setUpdatedAt(LocalDateTime.now());
+    sendNotification(chatMessage);
     return mapper.toDto(chatMessageRepository.save(chatMessage));
   }
 
@@ -87,4 +95,23 @@ public class ChatMessageService {
     }
     chatMessageRepository.delete(chatMessage.get());
   }
+
+  private void sendNotification(final ChatMessage chatMessage) {
+
+    final Notification notification = new Notification();
+    notification.setMessage(MessageType.CHAT_MESSAGE);
+    notification.setRead(false);
+    notification.setCreatedAt(LocalDateTime.now());
+    notification.setUpdatedAt(LocalDateTime.now());
+
+    for (final Player player : chatMessage.getChat()
+        .getPlayers()) {
+      if (player == chatMessage.getPlayer()) {
+        return;
+      }
+      notification.setPlayer(player);
+      notificationService.create(notification);
+    }
+  }
+
 }

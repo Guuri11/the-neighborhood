@@ -1,8 +1,11 @@
 package com.neighborhood.application.Friendship;
 
 import com.neighborhood.application.NotFoundException;
+import com.neighborhood.application.Notification.NotificationService;
 import com.neighborhood.application.mappers.FriendshipMapper;
 import com.neighborhood.domain.Friendship;
+import com.neighborhood.domain.Notification.MessageType;
+import com.neighborhood.domain.Notification.Notification;
 import com.neighborhood.infrastructure.persistence.FriendshipRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -16,10 +19,14 @@ public class FriendshipService {
   private final FriendshipRepository friendshipRepository;
   private final FriendshipMapper friendshipMapper;
 
-  public FriendshipService(final FriendshipRepository friendshipRepository, final FriendshipMapper friendshipMapper) {
+  private final NotificationService notificationService;
+
+  public FriendshipService(final FriendshipRepository friendshipRepository, final FriendshipMapper friendshipMapper,
+      final NotificationService notificationService) {
 
     this.friendshipRepository = friendshipRepository;
     this.friendshipMapper = friendshipMapper;
+    this.notificationService = notificationService;
   }
 
   public Collection<FriendshipDto> allByPlayer(final Long id) {
@@ -48,7 +55,9 @@ public class FriendshipService {
     friendship.setAccepted(false);
     friendship.setCreatedAt(LocalDateTime.now());
     friendship.setUpdatedAt(LocalDateTime.now());
-    return friendshipMapper.toDto(friendshipRepository.save(friendship));
+    friendshipRepository.save(friendship);
+    sendNotification(friendship);
+    return friendshipMapper.toDto(friendship);
   }
 
   public FriendshipDto update(final Friendship friendship, final Long id, final Long playerId) {
@@ -75,6 +84,17 @@ public class FriendshipService {
     }
 
     friendshipRepository.delete(friendship);
+  }
+
+  private void sendNotification(final Friendship friendship) {
+
+    final Notification notification = new Notification();
+    notification.setPlayer(friendship.getFriendTwo());
+    notification.setMessage(MessageType.FRIENDSHIP);
+    notification.setRead(false);
+    notification.setCreatedAt(LocalDateTime.now());
+    notification.setUpdatedAt(LocalDateTime.now());
+    notificationService.create(notification);
   }
 
   private boolean checkAuthorization(final Friendship friendship, final Long playerId) {
