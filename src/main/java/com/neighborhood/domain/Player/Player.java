@@ -2,7 +2,6 @@ package com.neighborhood.domain.Player;
 
 import com.neighborhood.domain.Chat;
 import com.neighborhood.domain.PlayerCareerHistory;
-import com.neighborhood.domain.StreetGame.StreetGame;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,12 +67,6 @@ public class Player implements UserDetails {
   private Archetype archetype;
   @Enumerated(EnumType.STRING)
   private Role role;
-
-  @ManyToMany
-  @JoinTable(name = "player_street_games",
-      joinColumns = @JoinColumn(name = "player_id"),
-      inverseJoinColumns = @JoinColumn(name = "street_games_id"))
-  private Set<StreetGame> streetGames = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "player")
   private List<PlayerCareerHistory> playerCareerHistories = new ArrayList<>();

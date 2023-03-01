@@ -1,6 +1,7 @@
 package com.neighborhood.domain;
 
 import com.neighborhood.domain.Player.Player;
+import com.neighborhood.domain.StreetGame.StreetGame;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,9 @@ public class PlayerStreetStats {
   @ManyToOne
   @JoinColumn(name = "player_id")
   private Player player;
+  @ManyToOne
+  @JoinColumn(name = "street_game_id")
+  private StreetGame streetGame;
   private Boolean won;
   @PositiveOrZero(message = "Value has to be 0 or more")
   private Long points;
@@ -43,6 +47,7 @@ public class PlayerStreetStats {
   private Long rebounds;
   @PositiveOrZero(message = "Value has to be 0 or more")
   private Long steals;
+  private Boolean accepted;
   private Boolean verified;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
